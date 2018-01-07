@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard" {{ (Request::is('/') ? 'class="active"' : '') }}>
-          <a class="nav-link" href="{{ url ('/') }}">
+          <a class="nav-link" href="{{ url ('/home') }}">
             <i class="fa fa-fw fa-dashboard"></i>
             <span class="nav-link-text">Dashboard</span>
           </a>
@@ -36,6 +36,7 @@
                             <a class="nav-link" data-toggle="modal" data-target="#Modellogout" >
                                 <i class="fa fa-fw fa-sign-out"></i>Logout</a>
                             </li>
+                            <li></li>
                 </ul>
             </div>
         </nav>
@@ -64,17 +65,27 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true" class="text-right">×</span>
             </button>
           </div>
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
+            <a href="{{ route('logout') }}" class="btn btn-primary"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="{{ url('logout') }}">Logout</a>
+
           </div>
         </div>
       </div>
     </div>
+
+                                        
 
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>

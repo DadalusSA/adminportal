@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -23,11 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('ControlPanel/panel');
+        return view('home');
     }
 
-    public function logout()
-    {
-        return view('login');
-    }
+
+    private function doLogout()
+{
+    Auth::logout(); // log the user out of our application
+    return Redirect::to('auth/login'); // redirect the user to the login screen
+}
 }

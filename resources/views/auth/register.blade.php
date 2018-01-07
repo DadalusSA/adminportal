@@ -52,6 +52,8 @@
           </div>
         </div>
     </div>
+
+
      <div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -64,75 +66,70 @@
           <div class="modal-body"><div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="card card-default">
-                <div class="card-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
+                    <form id="registeruser" class="form-horizontal" method="POST" action="{{ url('register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <div class="form-group has-feedback">
                             <label for="name" class="col-md-4 control-label">Name</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                                    <span class="text-danger">
+                                        <strong id="name-error"></strong>
                                     </span>
-                                @endif
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group has-feedback">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                               
+                                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                                    <span class="text-danger">
+                                        <strong id="email-error"></strong>
                                     </span>
-                                @endif
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="form-group has-feedback">
+                            <label for="job_title" class="col-md-4 control-label">job_title</label>
+
+                            <div class="col-md-6">
+                                <input id="job_title" type="text" class="form-control" name="job_title" value="{{ old('job_title') }}" required autofocus>
+
+                                    <span class="glyphicon glyphicon-job form-control-feedback"></span>
+                                    <span class="text-danger">
+                                        <strong id="job-error"></strong>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                            <span class="text-danger">
+                                <strong id="password-error"></strong>
+                            </span>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
+                            <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                         </div>
-
-                        <div class="form-group{{ $errors->has('jobtitle') ? ' has-error' : '' }}">
-                            <label for="jobtitle" class="col-md-4 control-label">Job title</label>
-
-                            <div class="col-md-6">
-                                <input id="jobtitle" type="text" class="form-control" name="jobtitle" value="{{ old('jobtitle') }}" required autofocus>
-
-                                @if ($errors->has('jobtitle'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('jobtitle') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
@@ -142,18 +139,47 @@
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
         </div>
     </div>
-</div>.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
           </div>
         </div>
       </div>
     </div>
 
+<script type="text/javascript">
+    $('body').on('click', '#submitForm', function(){
+        var registerForm = $("#registeruser");
+        var formData = registerForm.serialize();
+        $( '#name-error' ).html( "" );
+        $( '#email-error' ).html( "" );
+        $( '#password-error' ).html( "" );
+
+        $.ajax({
+            url:'/register',
+            type:'POST',
+            data:formData,
+            success:function(data) {
+                console.log(data);
+                if(data.errors) {
+                    if(data.errors.name){
+                        $( '#name-error' ).html( data.errors.name[0] );
+                    }
+                    if(data.errors.email){
+                        $( '#email-error' ).html( data.errors.email[0] );
+                    }
+                    if(data.errors.password){
+                        $( '#password-error' ).html( data.errors.password[0] );
+                    }
+                    
+                }
+                if(data.success) {
+                    }, 3000);
+                }
+            },
+        });
+    });
+</script>
 
 @endsection
